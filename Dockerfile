@@ -1,22 +1,43 @@
-# Usa a imagem oficial do n8n
-FROM n8nio/n8n:latest
+# Usa imagem oficial do Node 16 Alpine
+FROM node:16-alpine
 
-# Define a pasta de trabalho
+# Variável de versão do n8n
+ARG N8N_VERSION=0.258.0
+
+# Instalando dependências necessárias
+RUN apk add --no-cache \
+        tini \
+        tzdata \
+        git \
+        graphicsmagick \
+        su-exec \
+        python3 \
+        build-base \
+        ca-certificates \
+    && npm config set python "$(which python3)" \
+    && npm install -g n8n@${N8N_VERSION} full-icu \
+    && apk del build-base python3 ca-certificates \
+    && rm -rf /tmp/* /var/cache/apk/*
+
+# Instala módulos extras do n8n
+RUN npm install -g n8n-nodes-gemini --legacy-peer-deps
+
+# Configuração de ICU (para suporte completo a datas e internacionalização)
+ENV NODE_ICU_DATA /usr/local/lib/node_modules/full-icu
+
+# Diretório de trabalho
 WORKDIR /data
 
-# Instala o módulo customizado (usa --legacy-peer-deps para evitar conflitos de versões do npm)
-RUN npm install n8n-nodes-gemini --legacy-peer-deps
+# Copia entrypoint
+COPY docker-entrypoint.sh /docker-entrypoint.sh
+RUN chmod +x /docker-entrypoint.sh
 
-# Define variáveis de ambiente mínimas para produção
-ENV N8N_BASIC_AUTH_ACTIVE=true
-ENV N8N_BASIC_AUTH_USER=ruicirilo1980@gmail.com
-ENV N8N_BASIC_AUTH_PASSWORD=19725735aA?
-ENV N8N_HOST=0.0.0.0
-ENV N8N_PORT=5678
-ENV NODE_ENV=production
+# Usa tini como entrypoint
+ENTRYPOINT ["tini", "--", "/docker-entrypoint.sh"]
 
-# Expõe a porta
-EXPOSE 5678
+# Exposição da porta padrão do n8n
+EXPOSE 5678/tcp
+
 
 
 
