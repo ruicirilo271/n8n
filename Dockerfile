@@ -18,7 +18,7 @@ ENV NODE_ENV=production
 # Expõe a porta
 EXPOSE 5678
 
-# Mantém o mesmo comando da imagem oficial (podes usar só "n8n", o start já é default)
-CMD ["n8n"]
+# Comando de arranque (usa tini, que já vem na imagem oficial)
+CMD ["tini", "--", "n8n"]
 
 
