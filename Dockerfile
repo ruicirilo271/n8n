@@ -18,7 +18,7 @@ ENV NODE_ENV=production
 # Expõe a porta
 EXPOSE 5678
 
-# Comando de arranque (usa tini, que já vem na imagem oficial)
-CMD ["tini", "--", "n8n"]
+# Comando de arranque correto para Render
+CMD ["n8n"]
 
 
