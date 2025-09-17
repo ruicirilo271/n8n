@@ -14,7 +14,11 @@ ENV NODE_ENV=production
 
 # Expõe a porta
 EXPOSE 5678
-RUN npm install n8n-nodes-gemini
+
+
+RUN npm install n8n-nodes-gemini n8n-nodes-instagram
+
+
 # Comando de arranque
 CMD ["n8n", "start"]
 
