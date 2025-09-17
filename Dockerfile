@@ -16,7 +16,7 @@ ENV NODE_ENV=production
 EXPOSE 5678
 
 
-RUN npm install n8n-nodes-gemini n8n-nodes-instagram
+RUN npm install n8n-nodes-gemini
 
 
 # Comando de arranque
