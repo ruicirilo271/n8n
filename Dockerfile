@@ -1,13 +1,19 @@
-FROM node:20-alpine
-WORKDIR /home/node
+# Usa a imagem oficial do n8n
+FROM n8nio/n8n:latest
 
-COPY package*.json ./
-RUN npm install
+# Define a pasta de trabalho
+WORKDIR /data
 
-COPY . .
+# Define variáveis de ambiente mínimas para produção
+ENV N8N_BASIC_AUTH_ACTIVE=true
+ENV N8N_BASIC_AUTH_USER=ruicirilo1980@gmail.com
+ENV N8N_BASIC_AUTH_PASSWORD=19725735aA?
+ENV N8N_HOST=0.0.0.0
+ENV N8N_PORT=5678
+ENV NODE_ENV=production
 
-RUN npm run build
-
+# Expõe a porta
 EXPOSE 5678
-CMD ["npm", "run", "start"]
 
+# Comando de arranque
+CMD ["n8n", "start"]
